@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Store;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreRequest;
 
 class StoreController extends Controller
 {
@@ -16,31 +17,39 @@ class StoreController extends Controller
     {
         $this->user = $user;
         $this->store = $store;
+        $this->middleware('user.has.store')->only(['create', 'store']);
     }
 
     public function index()
     {
-        $stores = $this->store::all();
+        $store = auth()->user()->store;
+
+        // dd(auth()->user()->store);
         
 
-        return view('admin.stores.index', compact('stores'));
+        return view('admin.stores.index', compact('store'));
     }
 
 
     public function create()
     {
+
+        
+
         $users = $this->user::all(['id', 'name']);
         
         return view('admin.stores.create', compact('users'));
     }
 
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
-        // dd($request->user);
-        $user = $this->user::find($request->user);
-        $user->store()->create($request->all());
+        $user = auth()->user();
 
-        return redirect()->route('stores.index')
+        $user->store()->create($request->all());
+        // $user = $this->user::find($request->user);
+        
+
+        return redirect()->route('admin.stores.index')
                             ->with('success', 'Loja criada com sucesso');
         
     }

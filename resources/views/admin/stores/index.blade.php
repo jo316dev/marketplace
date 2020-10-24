@@ -8,37 +8,18 @@
                 <h1 class="text-center">Relação de Lojas Cadastradas</h1>
             </div>
             <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-striped">
-         
-                         <thead class="thead-dark">
-                             <th>#</th>
-                             <th>Loja</th>
-                             <th>Ações</th>
-                         </thead>
-                         <tbody>
-                             @foreach ($stores as $store)
-                                 <tr>
-                                     <td>{{ $store->id }}</td>
-                                     <td>{{ $store->name }}</td>
-                                     <td>
-                                        <button class="btn btn-success">Detalhes</button>
-                                        <a href="{{ route('admin.stores.edit', $store->id) }}" class="btn btn-warning">Editar</a>
-                                        <form action="{{ route('admin.stores.destroy', $store->id) }}">
-                                            @csrf
-                                            @method("DELETE")
-                                            <button type="submit" class="btn btn-danger">Excluir</button>
-                                        </form>
-                                       
-                                     </td>
-                                 </tr>
-                             @endforeach
-                         </tbody>
-         
-                    </table>
+                    <div class="jumbotron">
+                        <h1 class="display-4">{{ $store->name }}</h1>
+                        <p class="lead">{{ $store->description }}</p>
+                        <a href="{{ route('admin.products.index') }}" class="btn btn-dark">Ver produtos</a>
+                    </div>
                 </div>
                 <div class="card-footer">
-                    <a href="{{ route('admin.stores.create') }}" class="btn btn-success">Cadastrar Loja</a>
+                   @if (!$store)
+                       Você ainda não criou sua loja! <a href="{{ route('admin.stores.create') }}" class="btn btn-success">CriarLoja</a>
+                   @else
+                    <a href="{{ route('admin.products.create') }}" class="btn btn-dark">Cadastrar Produtos produtos</a>
+                   @endif
                 </div>
             </div>
         </div>
