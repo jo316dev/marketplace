@@ -84,6 +84,8 @@ class ProductController extends Controller
     public function edit($idProduct)
     {
         $product = $this->product->find($idProduct);
+
+        return view('admin.products.edit', compact('product'));
     }
 
     /**
@@ -95,7 +97,18 @@ class ProductController extends Controller
      */
     public function update(Request $request, $idProduct)
     {
-        $product = $this->product->find($idProduct);
+
+        
+       if(!$product = $this->product->find($idProduct)){
+
+            return redirect()->back()->with('error', 'Produto não encontrado!');
+
+       }
+
+       $product->update($request->all());
+
+       return redirect()->route('products.index')->with('success', 'Produto editado com sucesso!');
+
     }
 
     /**
@@ -104,8 +117,23 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($idProduct)
     {
-        //
+            
+       
+        if(!$product = $this->product->find($idProduct)){
+
+             return redirect()->back()->with('error', 'Produto não encontrado!');
+
+        }
+
+        $product->delete();
+        
+
+        return redirect()->route('products.index')->with('warning', 'Produto deletado com sucesso!');
+
+
+   
+
     }
 }
