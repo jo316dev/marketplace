@@ -27,9 +27,9 @@
                                      <td>{{ $product->price }}</td>
                                      <td>
                                         <button class="btn btn-success">Detalhes</button>
-                                        <a href="{{ route('products.edit', $product->id) }}" class="btn btn-warning">Editar</a>
+                                        <a href="{{ route('admin.products.edit', $product->id) }}" class="btn btn-warning">Editar</a>
                                         
-                                        <form action="{{ route('products.destroy', $product->id) }}" method="POST">
+                                        <form action="{{ route('admin.products.destroy', $product->id) }}" method="POST">
                                             @csrf
                                             @method("DELETE")
                                             <button type="submit" class="btn btn-danger">Deletar</button>
@@ -42,7 +42,7 @@
                     </table>
                 </div>
                 <div class="card-footer">
-                    <a href="{{ route('products.create') }}" class="btn btn-success">Cadastrar Produtos</a>
+                    <a href="{{ route('admin.products.create') }}" class="btn btn-success">Cadastrar Produtos</a>
                 </div>
             </div>
         </div>

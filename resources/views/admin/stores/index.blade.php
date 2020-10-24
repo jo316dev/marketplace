@@ -23,8 +23,13 @@
                                      <td>{{ $store->name }}</td>
                                      <td>
                                         <button class="btn btn-success">Detalhes</button>
-                                        <a href="{{ route('stores.edit', $store->id) }}" class="btn btn-warning">Editar</a>
-                                        <a href="{{ route('stores.delete', $store->id) }}" class="btn btn-danger">Remover</a>
+                                        <a href="{{ route('admin.stores.edit', $store->id) }}" class="btn btn-warning">Editar</a>
+                                        <form action="{{ route('admin.stores.destroy', $store->id) }}">
+                                            @csrf
+                                            @method("DELETE")
+                                            <button type="submit" class="btn btn-danger">Excluir</button>
+                                        </form>
+                                       
                                      </td>
                                  </tr>
                              @endforeach
@@ -33,7 +38,7 @@
                     </table>
                 </div>
                 <div class="card-footer">
-                    <a href="{{ route('stores.create') }}" class="btn btn-success">Cadastrar Loja</a>
+                    <a href="{{ route('admin.stores.create') }}" class="btn btn-success">Cadastrar Loja</a>
                 </div>
             </div>
         </div>

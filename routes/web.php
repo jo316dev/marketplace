@@ -3,26 +3,20 @@
 
 
 
-Route::prefix('admin')->namespace('Admin')->group(function(){
-    Route::prefix('stores')->group(function(){
+Route::group(['middleware' => ['auth']], function(){
 
-        Route::get('/', 'StoreController@index')->name('stores.index');
-        Route::get('/create', 'StoreController@create')->name('stores.create');
-        Route::post('/store', 'StoreController@store')->name('stores.store');
-        Route::get('/{idStore}/edit', 'StoreController@edit')->name('stores.edit');
-        Route::post('/update/{idStore}', 'StoreController@update')->name('stores.update');
-        Route::get('/delete/{idStore}', 'StoreController@delete')->name('stores.delete');
-        
+    Route::prefix('admin')->name('admin.')->namespace('Admin')->group(function(){
 
+
+        Route::resource('stores', 'StoreController');
+    
+        Route::resource('products', 'ProductController');
+         
         
+        
+       
+    
     });
-
-    Route::resource('products', 'ProductController');
-     
-    
-    
-   
-
 });
 
 
@@ -31,15 +25,22 @@ Route::prefix('admin')->namespace('Admin')->group(function(){
 
 
 
-Route::prefix('admin')->namespace('Admin')->group(function(){
-    Route::prefix('users')->group(function(){
+// Route::prefix('admin')->namespace('Admin')->group(function(){
+//     Route::prefix('users')->group(function(){
 
-        Route::get('/', 'UserController@index')->name('users.index');
-        Route::get('/create', 'UserController@create')->name('users.create');
-        Route::post('/store', 'UserController@store')->name('users.store');
+//         Route::get('/', 'UserController@index')->name('users.index');
+//         Route::get('/create', 'UserController@create')->name('users.create');
+//         Route::post('/store', 'UserController@store')->name('users.store');
        
 
-    });
+//     });
+// });
+
+Route::get('/', function () {
+    return view('welcome');
 });
 
 
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
