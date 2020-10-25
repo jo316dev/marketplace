@@ -32,13 +32,7 @@
                         <label for="">Preço</label>
                         <input type="text" name="price" class="form-control" placeholder="R$ 0.00">
                     </div>
-                
-                    <select name="store_id" id="" class="form-control">
-                        @foreach ($stores as $store)
-                            <option value="{{ $store->id }}">{{ $store->name }}</option>
-                        @endforeach
-                    </select>
-               
+                           
             </div>
 
             <div class="card-footer">

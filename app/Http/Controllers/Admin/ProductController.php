@@ -25,6 +25,7 @@ class ProductController extends Controller
     public function index()
     {
         $products = $this->product->paginate(5);
+        // $products = auth()->user
 
         return view('admin.products.index', compact('products'));
 
@@ -50,18 +51,14 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        if(!$store = Store::find($request->store_id)){
-
-            return redirect()->back()->with('error', 'Loja não encontrada');
-        }
+        $store = auth()->user()->store;
 
         $store->products()->create($request->all());
 
         return redirect()
-        ->route('products.index')
+        ->route('admin.products.index')
         ->with('success', 'Produto criado com sucesso!');
-        
-
+    
     }
 
     /**

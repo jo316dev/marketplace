@@ -17,7 +17,7 @@ class StoreController extends Controller
     {
         $this->user = $user;
         $this->store = $store;
-        $this->middleware('user.has.store')->only(['create', 'store']);
+        $this->middleware('user.has.store')->only(['create', 'store']); 
     }
 
     public function index()

@@ -11,6 +11,7 @@
                     <div class="jumbotron">
                         <h1 class="display-4">{{ $store->name }}</h1>
                         <p class="lead">{{ $store->description }}</p>
+                        <p>Total de produtos cadastrados: {{ $store->products->count() }}</p>
                         <a href="{{ route('admin.products.index') }}" class="btn btn-dark">Ver produtos</a>
                     </div>
                 </div>
