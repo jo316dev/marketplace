@@ -34,6 +34,18 @@
                     <label for="">Descrição detalhada</label>
                     <textarea name="body" id="" cols="30" class="form-control" rows="10">{{ $product->body }}</textarea>
                 </div>
+
+
+                <div class="form-group">
+                    <label for="">Categorias</label>
+                    <select name="categories[]" id="" class="form-control" multiple>
+                        @foreach ($categories as $category)
+                            <option value="{{ $category->id }}"
+                                @if ($product->categories->contains($category)) selected @endif
+                                >{{ $category->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
                 
                 
         </div>

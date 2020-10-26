@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ProductRequest;
 use Illuminate\Http\Request;
 use App\Models\Product;
-use App\Models\Store;
+use App\Models\Category;
 
 class ProductController extends Controller
 {
@@ -24,7 +25,9 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = $this->product->paginate(5);
+        $userStore = auth()->user()->store; //puxa a loja do usuario
+       
+        $products = $userStore->products()->paginate(10);
         // $products = auth()->user
 
         return view('admin.products.index', compact('products'));
@@ -39,8 +42,8 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $stores = Store::all(['id', 'name']);
-        return view('admin.products.create', compact('stores'));
+        $categories = Category::all(['id', 'name']);
+        return view('admin.products.create', compact('categories'));
     }
 
     /**
@@ -51,9 +54,20 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
+
+        // dd($request->file('photos'));
+
         $store = auth()->user()->store;
 
-        $store->products()->create($request->all());
+        $product = $store->products()->create($request->all());
+
+        $product->categories()->sync($request['categories']);
+
+        if($request->hasFile('photos')){
+
+            $images = $this->imageUpload($request, 'image');
+            $product->photos()->createMany($images);
+        }
 
         return redirect()
         ->route('admin.products.index')
@@ -81,8 +95,9 @@ class ProductController extends Controller
     public function edit($idProduct)
     {
         $product = $this->product->find($idProduct);
+        $categories = Category::all(['id', 'name']);
 
-        return view('admin.products.edit', compact('product'));
+        return view('admin.products.edit', compact('product', 'categories'));
     }
 
     /**
@@ -103,8 +118,9 @@ class ProductController extends Controller
        }
 
        $product->update($request->all());
+       $product->categories()->sync($request['categories']);
 
-       return redirect()->route('products.index')->with('success', 'Produto editado com sucesso!');
+       return redirect()->route('admin.products.index')->with('success', 'Produto editado com sucesso!');
 
     }
 
@@ -132,5 +148,22 @@ class ProductController extends Controller
 
    
 
+    }
+
+
+    private function imageUpload(Request $request, $imageCollumn)
+    {
+        $images = $request->photos;
+
+        // dd($images);
+
+        $uploadedImages = [];
+
+        foreach ($images as $image) {
+            
+            $uploadedImages[] = [$imageCollumn => $image->store('products', 'public')];
+
+            return $uploadedImages;
+        }
     }
 }
