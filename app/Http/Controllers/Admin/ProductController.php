@@ -27,7 +27,7 @@ class ProductController extends Controller
     {
         $userStore = auth()->user()->store; //puxa a loja do usuario
        
-        $products = $userStore->products()->paginate(10);
+        $products = $userStore->products()->paginate(100);
         // $products = auth()->user
 
         return view('admin.products.index', compact('products'));
@@ -97,6 +97,8 @@ class ProductController extends Controller
         $product = $this->product->find($idProduct);
         $categories = Category::all(['id', 'name']);
 
+        // dd($product->all());
+
         return view('admin.products.edit', compact('product', 'categories'));
     }
 
@@ -118,7 +120,19 @@ class ProductController extends Controller
        }
 
        $product->update($request->all());
+
+       if($request->hasFile('photos')){
+
+        $images = $this->imageUpload($request, 'image');
+        $product->photos()->createMany($images);
+    }
+
+
+
        $product->categories()->sync($request['categories']);
+
+
+   
 
        return redirect()->route('admin.products.index')->with('success', 'Produto editado com sucesso!');
 
